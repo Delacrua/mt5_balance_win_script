@@ -1,0 +1,4 @@
+tortoise-orm[asyncpg]
+pydantic==2.7.1
+pydantic-settings==2.2.1
+MetaTrader5~=5.0.4288
