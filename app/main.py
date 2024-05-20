@@ -8,6 +8,10 @@ from utils.loggers import logger
 
 
 if __name__ == "__main__":
-    run_async(tortoise_init())
-    logger.info("Starting balance collection")
-    asyncio.run(BalanceService().collect_accounts_data())
+    try:
+        run_async(tortoise_init())
+        logger.info("Starting balance collecting")
+        asyncio.run(BalanceService().collect_accounts_data())
+        logger.info("Finished balance collecting")
+    except Exception as exc:
+        logger.critical("An unexpected error occurred while running script: %s", str(exc))

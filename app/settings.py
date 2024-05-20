@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
+    SERVER: str
 
     @property
     def DB_URL_asyncpg(self):

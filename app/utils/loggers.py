@@ -4,7 +4,7 @@ import os
 from logging.handlers import TimedRotatingFileHandler
 
 
-formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s')
+formatter = logging.Formatter("%(asctime)s : %(levelname)s : %(name)s : %(message)s")
 
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.INFO)
@@ -19,7 +19,7 @@ file_handler = TimedRotatingFileHandler(log_filepath, when="midnight", interval=
 file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(formatter)
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(name)s : %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s : %(levelname)s : %(name)s : %(message)s")
 logging.root.handlers = [console_handler, file_handler]
 
-logger = logging.getLogger('main_logger')
+logger = logging.getLogger("main_logger")
