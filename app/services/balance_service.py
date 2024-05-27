@@ -15,31 +15,32 @@ class BalanceService:
                 "Exception occurred while getting accounts data: %s",
                 str(exc),
             )
-        accounts_data = []
+        else:
+            accounts_data = []
 
-        #  unable to use asyncio.gather as it requires MT5 client to be logged in to connect to server
-        for account in account_objects:
-            account_data = await self._get_account_data(
-                account_number=int(account.account_number),
-                password=account.password,
-            )
-            if account_data is not None:
-                logger.info(f"Fetched account balance: %s", account_data)
-                accounts_data.append(account_data)
+            #  unable to use asyncio.gather as it requires MT5 client to be logged in to connect to server
+            for account in account_objects:
+                account_data = await self._get_account_data(
+                    account_number=int(account.account_number),
+                    password=account.password_vps,
+                )
+                if account_data is not None:
+                    logger.info(f"Fetched account balance: %s", account_data)
+                    accounts_data.append(account_data)
 
-        if accounts_data:
-            logger.info(f"Saving balance data for accounts: %s", [acc.login for acc in accounts_data])
-            await BalanceData.bulk_create(
-                [
-                    BalanceData(
-                        account_number=acc.login,
-                        created_at=acc.created_at,
-                        balance=acc.balance,
-                        equity=acc.equity,
-                    )
-                    for acc in accounts_data
-                ]
-            )
+            if accounts_data:
+                logger.info(f"Saving balance data for accounts: %s", [acc.login for acc in accounts_data])
+                await BalanceData.bulk_create(
+                    [
+                        BalanceData(
+                            account_number=acc.login,
+                            report_dt=acc.created_at,
+                            balance1=acc.balance,
+                            balance2=acc.equity,
+                        )
+                        for acc in accounts_data
+                    ]
+                )
 
     async def _get_account_data(self, account_number: int, password: str) -> AccountInfoResponse | None:
         logger.info("Fetching account balance data for account number %s", account_number)
