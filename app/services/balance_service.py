@@ -20,14 +20,26 @@ class BalanceService:
 
             #  unable to use asyncio.gather as it requires MT5 client to be logged in to connect to server
             for account in account_objects:
-                account_data = await self._get_account_data(
-                    account_number=int(account.account_number),
-                    password=account.password_vps,
-                )
-                if account_data is not None:
-                    logger.info(f"Fetched account balance: %s", account_data)
-                    accounts_data.append(account_data)
-
+                if not (account.password and account.account_number):
+                    logger.error(
+                        "Wrong account number format or no password for account number %s",
+                        account.account_number,
+                    )
+                    continue
+                try:
+                    account_data = await self._get_account_data(
+                        account_number=int(account.account_number),
+                        password=account.password,
+                    )
+                    if account_data is not None:
+                        logger.info(f"Fetched account balance: %s", account_data)
+                        accounts_data.append(account_data)
+                except Exception as exc:
+                    logger.error(
+                        "Exception occurred while processing account %s data: %s",
+                        account.account_number,
+                        str(exc),
+                    )
             if accounts_data:
                 logger.info(f"Saving balance data for accounts: %s", [acc.login for acc in accounts_data])
                 await BalanceData.bulk_create(

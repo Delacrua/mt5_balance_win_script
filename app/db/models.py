@@ -4,7 +4,7 @@ from tortoise import fields
 
 class UserData(Model):
     account_number = fields.CharField(max_length=512, null=True, blank=True, verbose_name="Номер счета")
-    password_vps = fields.CharField(max_length=512, null=True, blank=True, verbose_name="пароль")
+    password = fields.CharField(max_length=512, null=True, blank=True, verbose_name="пароль")
 
     class Meta:
         table = "finance_tariffsubscription"
